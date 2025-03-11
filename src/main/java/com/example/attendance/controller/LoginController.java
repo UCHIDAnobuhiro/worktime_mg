@@ -1,8 +1,20 @@
 package com.example.attendance.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
-@RestController
+@Controller
 public class LoginController {
+
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+
+	// テスト用
+	@GetMapping("/worktime")
+	public String dashboard() {
+		return "dashboard";
+	}
 
 }
