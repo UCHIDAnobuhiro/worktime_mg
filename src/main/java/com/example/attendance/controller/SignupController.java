@@ -6,6 +6,7 @@ import java.util.Optional;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,10 +21,12 @@ import com.example.attendance.repository.UsersRepository;
 @Controller
 public class SignupController {
 	private final UsersRepository usersRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public SignupController(UsersRepository usersRepository) {
+	public SignupController(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
 		this.usersRepository = usersRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@GetMapping("/signup")
@@ -55,6 +58,9 @@ public class SignupController {
 
 		// 日付のデータ取得
 		user.setCreateDate(LocalDateTime.now());
+
+		// パスワードをハッシュ化
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
 		// ユーザーをデータベースに保存
 		usersRepository.save(user);
