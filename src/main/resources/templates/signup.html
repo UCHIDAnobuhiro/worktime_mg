@@ -53,16 +53,12 @@
 				</div>
 				<div class="relative mb-4">
 					<label for="department" class="leading-7 text-sm text-gray-600">Department</label>
-					<select name="departmentId" th:field="*{departmentId}"
+					<select id="department" name="department" th:field="*{department.id}"
 						class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
 						required>
-						<option value="" th:selected="${user.departmentId == null}">選択してください</option>
-						<option value="1">人事部</option>
-						<option value="2">総務部</option>
-						<option value="3">経理部</option>
-						<option value="4">マーケティング部</option>
-						<option value="5">IT部</option>
-						<option value="6">該当なし</option>
+						<option value="" th:selected="${user.department == null}">選択してください</option>
+						<option th:each="department : ${departments}" th:value="${department.id}" th:text="${department.department_name}">
+						</option>
 					</select>
 				</div>
 				<button type="submit"

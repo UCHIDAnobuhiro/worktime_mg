@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
@@ -47,8 +49,9 @@ public class Users {
 	private LocalDateTime createDate;
 
 	@NotNull(message = "部署を選択してください")
-	@Column(name = "department_id", nullable = false)
-	private Integer departmentId;
+	@ManyToOne
+	@JoinColumn(name = "department_id", nullable = false)
+	private Department department;
 
 	@NotEmpty(message = "確認用パスワードを入力してください")
 	@Transient

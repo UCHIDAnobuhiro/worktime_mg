@@ -1,6 +1,7 @@
 package com.example.attendance.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.validation.Valid;
@@ -15,29 +16,41 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.attendance.model.Department;
 import com.example.attendance.model.Users;
 import com.example.attendance.repository.UsersRepository;
+import com.example.attendance.service.DepartmentService;
 
 @Controller
 public class SignupController {
 	private final UsersRepository usersRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final DepartmentService departmentService;
 
 	@Autowired
-	public SignupController(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
+	public SignupController(UsersRepository usersRepository, PasswordEncoder passwordEncoder,
+			DepartmentService departmentService) {
 		this.usersRepository = usersRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.departmentService = departmentService;
 	}
 
 	@GetMapping("/signup")
 	public String showSignupForm(Model model) {
 		model.addAttribute("user", new Users());
+		List<Department> departments = departmentService.getAllDepartments();
+		model.addAttribute("departments", departments);
 		return "signup";
 	}
 
 	@PostMapping("/signup")
 	public String processSignup(@ModelAttribute("user") @Valid Users user, BindingResult result,
 			RedirectAttributes redirectAttributes, Model model) {
+
+		// 部署リストを取得（エラー時の再表示用）
+		List<Department> departments = departmentService.getAllDepartments();
+		model.addAttribute("departments", departments);
+
 		if (result.hasErrors()) {
 			System.out.println("バリデーションエラー: " + result.getAllErrors());
 			return "signup";
@@ -55,6 +68,14 @@ public class SignupController {
 			result.rejectValue("confirmPassword", "error.user", "パスワードが一致しません");
 			return "signup";
 		}
+
+		// 選択された `departmentId` から `Department` エンティティを取得
+		Optional<Department> departmentOpt = departmentService.getDepartmentById(user.getDepartment().getId());
+		if (departmentOpt.isEmpty()) {
+			result.rejectValue("department", "error.user", "選択された部署が無効です");
+			return "signup";
+		}
+		user.setDepartment(departmentOpt.get()); // Departmentエンティティをセット
 
 		// 日付のデータ取得
 		user.setCreateDate(LocalDateTime.now());
