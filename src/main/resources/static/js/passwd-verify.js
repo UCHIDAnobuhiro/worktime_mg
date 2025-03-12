@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 	const form = document.querySelector("form");
-	const password = document.getElementById("passwd");
-	const confirmPassword = document.getElementById("confirm-passwd");
+	const password = document.getElementById("password");
+	const confirmPassword = document.getElementById("confirm-password");
 	
 	form.addEventListener("submit", (event) => {
 		if (password.value !== confirmPassword.value) {
