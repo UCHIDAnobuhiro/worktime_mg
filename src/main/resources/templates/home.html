@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+	<link rel="stylesheet" href="/css/home-style.css">
+</head>
+
+<body>
+	<header>
+		
+	</header>
+	<main>
+		<section class="text-gray-600 body-font">
+		  <div class="container px-5 py-24 mx-auto">
+		    <div class="flex flex-col text-center w-full mb-20">
+
+				<div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto relative">
+				    <h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 mx-auto">○○さん</h1>
+				    <button class="absolute right-0 top-0 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">打刻</button>
+				</div>
+		      <p class="lg:w-2/3 mx-auto leading-relaxed text-base">毎日の打刻を忘れないでください</p>
+		    </div>
+			<div class="lg:w-2/3 w-full mx-auto overflow-auto flex flex-row items-center mb-2">
+				<span class="w-1/6">3月</span>
+				<span class="w-1/4">総勤務時間:○○時間</span>
+				<span class="w-1/4">出勤日数:○○日</span>
+				<button class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">Button</button>
+			</div>
+			<div class="lg:w-2/3 w-full mx-auto overflow-auto">
+			    <table class="table-auto w-full text-left whitespace-no-wrap">
+			        <thead>
+			            <tr>
+			                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">日付</th>
+			                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">出勤時刻</th>
+			                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">退勤時刻</th>
+			                <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">勤務時間</th>
+			                <th class="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <tr th:each="stamp : ${stamps}">
+			                <td class="px-4 py-3" th:text="${stamp.day}"></td>
+			                <td class="px-4 py-3" th:text="${stamp.start_time}"></td>
+			                <td class="px-4 py-3" th:text="${stamp.end_time}"></td>
+			                <td class="px-4 py-3 text-lg text-gray-900" th:text="${stamp.hoursWorked}"></td>
+			                <td class="w-10 text-center">
+								<a>編集</a>
+<!--			                    <a th:href="@{/edit/{id}(id=${stamp.id})}">編集</a>-->
+			                </td>
+			            </tr>
+			        </tbody>
+			    </table>
+			</div>
+		  </div>
+		</section>
+	</main>
+	<footer>
+		
+	</footer>
+</body>
+
+</html>
