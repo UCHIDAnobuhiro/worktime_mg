@@ -11,11 +11,6 @@ public class LoginController {
 		return "login";
 	}
 
-	@GetMapping("/signup")
-	public String signup() {
-		return "signup";
-	}
-
 	// テスト用
 	@GetMapping("/worktime")
 	public String dashboard() {
