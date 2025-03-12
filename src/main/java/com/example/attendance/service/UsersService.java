@@ -1,5 +1,5 @@
 package com.example.attendance.service;
 
-public class UserService {
+public class UsersService {
 
 }
