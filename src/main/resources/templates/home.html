@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 
-<body onload="updateStampByMonth()">
+<body>
 	<header>
 
 	</header>
@@ -24,16 +24,12 @@
 					<p class="lg:w-2/3 mx-auto leading-relaxed text-base">毎日の打刻を忘れないでください</p>
 				</div>
 				<div class="lg:w-2/3 w-full mx-auto overflow-auto flex flex-row items-center mb-2">
-
 					<label for="monthSelect">月を選択：</label>
-					<select id="monthSelect" name="month" onchange="updateStampByMonth(); updateWorkTimeByMonth()">
-						<option th:each="calculator : ${calculators}" th:value="${calculator.month}"
-							th:text="${calculator.month} + '月'" th:selected="${calculator.month == selectedMonth}">
-						</option>
+					<select id="monthSelect" name="month">
+						<option th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}" th:text="${month}+'月'"></option>
 					</select>
 					<span class="ml-4" id="workTimeMonth" 
 					    th:text="'総勤務時間: ' + (${#lists.isEmpty(calculators) ? '00:00:00' : calculators[0].workTimeMonth})"></span>
-
 					<span class="ml-4" id="workDaysMonth" 
 					    th:text="'出勤日数: ' + (${#lists.isEmpty(calculators) ? 0 : calculators[0].workDaysMonth})"></span>
 						<button

@@ -36,7 +36,7 @@ public class HomeController {
 	public String showHome(Model model) {
 
 		//user_idは1に限定する、ログイン機能と連結すると修正
-		Long userId = 2L;
+		Long userId = 1L;
 
 		List<Calculator> calculators = calculatorRepository.findByUserId(userId);
 		model.addAttribute("calculators", calculators);
@@ -58,14 +58,16 @@ public class HomeController {
 
 		// データベースにmonth+useridでデータを取得し、ない場合404
 		Calculator calculator = calculatorRepository.findByUserIdAndMonth(userId, month);
+		Map<String, Object> response = new HashMap<>();
 		if (calculator == null) {
-			return ResponseEntity.notFound().build();
+			response.put("workTimeMonth", "00:00:00");
+			response.put("workDaysMonth", "0");
+		} else {
+			response.put("workTimeMonth", calculator.getWorkTimeMonth());
+			response.put("workDaysMonth", calculator.getWorkDaysMonth());
 		}
 
 		// 月に対するcalculatorをresponseに追加
-		Map<String, Object> response = new HashMap<>();
-		response.put("workTimeMonth", calculator.getWorkTimeMonth());
-		response.put("workDaysMonth", calculator.getWorkDaysMonth());
 		return ResponseEntity.ok(response);
 	}
 
