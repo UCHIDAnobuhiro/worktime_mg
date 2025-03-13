@@ -36,7 +36,7 @@ public class HomeController {
 	public String showHome(Model model) {
 
 		//user_idは1に限定する、ログイン機能と連結すると修正
-		Long userId = 1L;
+		Long userId = 2L;
 
 		List<Calculator> calculators = calculatorRepository.findByUserId(userId);
 		model.addAttribute("calculators", calculators);

@@ -32,10 +32,14 @@
 							th:text="${calculator.month} + '月'" th:selected="${calculator.month == selectedMonth}">
 						</option>
 					</select>
-					<span class="ml-4" id="workTimeMonth" th:text="'総勤務時間: '+${calculators[0].workTimeMonth}"></span>
-					<span class="ml-4" id="workDaysMonth" th:text="'出勤日数: '+${calculators[0].workDaysMonth}"></span>
-					<button
-						class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">従業員一覧</button>
+					<span class="ml-4" id="workTimeMonth" 
+					    th:text="'総勤務時間: ' + (${#lists.isEmpty(calculators) ? '00:00:00' : calculators[0].workTimeMonth})"></span>
+
+					<span class="ml-4" id="workDaysMonth" 
+					    th:text="'出勤日数: ' + (${#lists.isEmpty(calculators) ? 0 : calculators[0].workDaysMonth})"></span>
+						<button
+							class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none
+							hover:bg-indigo-600 rounded">従業員一覧</button>
 				</div>
 				<div class="lg:w-2/3 w-full mx-auto overflow-auto">
 					<table class="table-auto w-full text-left whitespace-no-wrap" id="tableContainer">
