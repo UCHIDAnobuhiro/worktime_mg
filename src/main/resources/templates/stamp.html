@@ -1,10 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Insert title here</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
+
 <body>
-<h2>打刻画面</h2>
+	<div th:insert="~{fragments/header :: header-template}"></div>
+	<main>
+		<main class="flex-grow container mx-auto p-4">
+			<section class="text-gray-600 body-font">
+				<div class="container py-24 mx-auto">
+					<div class="flex flex-col text-center w-full mb-20">
+						<div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto relative">
+							<h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 mx-auto">○○さん</h1>
+							<button
+								class="absolute right-0 top-0 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+								onclick="location.href='home'">戻る</button>
+						</div>
+						<p class="lg:w-2/3 mx-auto leading-relaxed text-base">毎日の打刻を忘れないでください</p>
+					</div>
+					<div class="flex flex-row">
+
+						<div class="px-2 w-1/2 ">
+							<div class="flex flex-col w-full sm:py-24 py-16 relative h-full items-center">
+								<h1 th:text="${nowDate}" class="text-5xl mb-10"></h1>
+								<h1 th:text="${nowTime}" class="text-3xl"></h1>
+							</div>
+						</div>
+
+						<div class="px-2 w-1/2 py-10">
+							<div class="flex flex-wrap w-full relative h-full">
+								<div class="flex w-full">
+									<button
+										class="option-btn  text-white bg-indigo-500 border-0 px-6 focus:outline-none hover:bg-indigo-600 rounded w-1/2 mr-3 text-3xl">
+										出勤</button>
+									<button
+										class="option-btn  text-white bg-indigo-500 border-0 px-6 focus:outline-none hover:bg-indigo-600 rounded w-1/2 ml-3 text-3xl">
+										退勤</button>
+								</div>
+								<div class="flex flex-col justify-center w-full mt-5">
+									<button
+										class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-2xl w-full h-1/2">
+										打刻</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				</div>
+			</section>
+		</main>
+
+	</main>
+	<div th:insert="~{fragments/footer :: footer-template}"></div>
 </body>
+
 </html>
