@@ -2,6 +2,7 @@ package com.example.attendance.model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 
 import jakarta.persistence.Column;
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 //import jakarta.persistence.Transient;
+import jakarta.persistence.Transient;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -33,20 +35,34 @@ public class Stamp {
 	@Column(nullable = false)
 	private Date day;
 
-	@Column(nullable = false)
-	private Long user_id;
+	@Transient
+	private Integer month;
 
-	public String getHoursWorked() {
-		if (end_time == null || start_time == null) {
-			return "null"; // 如果 end_time 为 null，返回 null
+	@Column(name = "user_id", nullable = false)
+	private Long userId;
+
+	//	dayでmonthを取得
+	public Integer getMonth() {
+		if (day != null) {
+			LocalDate localDate = day.toLocalDate();
+			System.out.println(localDate.getMonthValue());
+			return localDate.getMonthValue();
 		}
+		return null;
+	}
 
+	//毎日の勤務時間を計算
+	public String getHoursWorked() {
+		//どちらかがnullの場合00:00:00に変換
+		if (end_time == null || start_time == null) {
+			return "00:00:00";
+		}
 		long durationInMillis = end_time.getTime() - start_time.getTime();
-		long durationInSeconds = durationInMillis / 1000; // 毫秒转换为秒
-		long hours = TimeUnit.SECONDS.toHours(durationInSeconds); // 获取小时
-		long minutes = TimeUnit.SECONDS.toMinutes(durationInSeconds) - TimeUnit.HOURS.toMinutes(hours); // 获取分钟
-		long seconds = durationInSeconds - TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(durationInSeconds)); // 获取秒数
+		long durationInSeconds = durationInMillis / 1000; //変形
+		long hours = TimeUnit.SECONDS.toHours(durationInSeconds);//Hour
+		long minutes = TimeUnit.SECONDS.toMinutes(durationInSeconds) - TimeUnit.HOURS.toMinutes(hours); //Minutes
+		long seconds = durationInSeconds - TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(durationInSeconds)); //seconds
 
-		return String.format("%02d:%02d:%02d", hours, minutes, seconds); // 格式化为 "hh:mm:ss"
+		return String.format("%02d:%02d:%02d", hours, minutes, seconds);
 	}
 }
