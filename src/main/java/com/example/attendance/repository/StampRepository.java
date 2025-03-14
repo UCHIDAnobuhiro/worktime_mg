@@ -1,5 +1,6 @@
 package com.example.attendance.repository;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ import com.example.attendance.model.Stamp;
 public interface StampRepository extends JpaRepository<Stamp, Long> {
 
 	List<Stamp> findByUserId(Long userId);
+
+	Stamp findByUserIdAndDay(Long userId, Date day);
 }
