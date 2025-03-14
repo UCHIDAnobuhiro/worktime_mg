@@ -11,10 +11,4 @@ public class LoginController {
 		return "login";
 	}
 
-	// テスト用
-	@GetMapping("/worktime")
-	public String dashboard() {
-		return "dashboard";
-	}
-
 }

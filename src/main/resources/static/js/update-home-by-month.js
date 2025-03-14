@@ -75,7 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					<td class="px-4 py-3 ${!(isCurrentMonth && isCurrentDay) ? 'text-red-500' : ''}">
 						${isCurrentMonth && isCurrentDay ? stampHoursWorked : '00:00:00'}
 					</td>
-						<td class="w-10">編集</td>
 					`;
 				}
 			})
