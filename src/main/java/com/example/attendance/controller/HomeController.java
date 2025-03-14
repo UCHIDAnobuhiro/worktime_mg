@@ -36,7 +36,7 @@ public class HomeController {
 	public String showHome(Model model) {
 
 		//user_idは1に限定する、ログイン機能と連結すると修正
-		Long userId = 1L;
+		Long userId = 2L;
 
 		List<Calculator> calculators = calculatorRepository.findByUserId(userId);
 		model.addAttribute("calculators", calculators);
@@ -54,7 +54,7 @@ public class HomeController {
 	public ResponseEntity<Map<String, Object>> updateWorkTime(@PathVariable Integer month, Model model,
 			HttpSession session) {
 		//暫定user_id＝1
-		Long userId = 1L;
+		Long userId = 2L;
 
 		// データベースにmonth+useridでデータを取得し、ない場合404
 		Calculator calculator = calculatorRepository.findByUserIdAndMonth(userId, month);
@@ -77,7 +77,7 @@ public class HomeController {
 	public ResponseEntity<List<Stamp>> getStampsByMonth(@PathVariable Integer month, HttpSession session) {
 
 		//暫定userId
-		Long userId = 1L;
+		Long userId = 2L;
 		List<Stamp> allStamps = stampRepository.findByUserId(userId); // USER_IDに対するすべてのstampを取得
 
 		//stampのday列をmonth化し、選択された月のみ分をlist化する

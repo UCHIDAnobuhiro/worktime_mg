@@ -10,8 +10,7 @@
 
 <body>
 	<div th:insert="~{fragments/header :: header-template}"></div>
-	<main>
-		<main class="flex-grow container mx-auto p-4">
+	<main class="flex-grow container mx-auto p-4">
 			<section class="text-gray-600 body-font">
 				<div class="container py-24 mx-auto">
 					<div class="flex flex-col text-center w-full mb-20">
@@ -32,32 +31,46 @@
 							</div>
 						</div>
 
-						<div class="px-2 w-1/2 py-10">
-							<div class="flex flex-wrap w-full relative h-full">
-								<div class="flex w-full">
-									<button
-										class="option-btn  text-white bg-indigo-500 border-0 px-6 focus:outline-none hover:bg-indigo-600 rounded w-1/2 mr-3 text-3xl">
-										出勤</button>
-									<button
-										class="option-btn  text-white bg-indigo-500 border-0 px-6 focus:outline-none hover:bg-indigo-600 rounded w-1/2 ml-3 text-3xl">
-										退勤</button>
-								</div>
-								<div class="flex flex-col justify-center w-full mt-5">
-									<button
-										class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-2xl w-full h-1/2">
-										打刻</button>
+						<div class="w-1/2">
+							<div class="flex flex-wrap w-full relative h-full ">
+								<div class="flex flex-col w-full justify-center">
+									<form th:action="@{/worktime/stamp}" method="post" class="h-full">
+										
+									    <!-- 隐藏字段存储 isClockIn 值 -->
+									    <input type="hidden" name="isClockIn" id="isClockIn" value=""/>
+										<div class="flex flex-row justify-center w-full mt-5 h-1/2">
+									    <!-- 出勤按钮 -->
+									    <button id="clockInBtn" type="button"
+									        class="stamp-btn text-white bg-indigo-500 border-0 px-6 focus:outline-none hover:bg-indigo-600 rounded w-1/2 mr-3 text-3xl">
+									        出勤
+									    </button>
+
+									    <!-- 退勤按钮 -->
+									    <button id="clockOutBtn" type="button"
+									        class="stamp-btn text-white bg-indigo-500 border-0 px-6 focus:outline-none hover:bg-indigo-600 rounded w-1/2 ml-3 text-3xl">
+									        退勤
+									    </button>
+										</div>
+									    <!-- 提交按钮 -->
+									    <div class="flex flex-col justify-center w-full mt-5 h-1/4">
+									        <button type="submit"
+									            class="stamp-btn text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-2xl w-full h-full">
+									            打刻
+									        </button>
+									    </div>
+									</form>
+									<div th:text="${stampErrorMsg}" class="text-red-500 text-sm text-xl">
+									</div>
 								</div>
 							</div>
 						</div>
-
 					</div>
 				</div>
 				</div>
 			</section>
-		</main>
-
 	</main>
 	<div th:insert="~{fragments/footer :: footer-template}"></div>
+	<script th:src="@{/js/check-in-out.js}"></script>
 </body>
 
 </html>
