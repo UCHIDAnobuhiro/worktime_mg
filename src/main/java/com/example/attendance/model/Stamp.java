@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 //import jakarta.persistence.Transient;
 import jakarta.persistence.Transient;
@@ -38,8 +40,9 @@ public class Stamp {
 	@Transient
 	private Integer month;
 
-	@Column(name = "user_id", nullable = false)
-	private Long userId;
+	@ManyToOne
+	@JoinColumn(name = "user_id", nullable = false) // Usersテーブルのidを参照する外部キー
+	private Users user; // `Users`エンティティとの関連付け
 
 	//	dayでmonthを取得
 	public Integer getMonth() {

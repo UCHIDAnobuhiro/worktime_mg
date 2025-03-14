@@ -63,9 +63,13 @@ document.addEventListener("DOMContentLoaded", () => {
 					const isCurrentMonth = stampMonth === (selectedMonth - 1);
 					const isCurrentDay = stampDayOfMonth === i;
 
+					// 曜日の設定
+					const currentDay =new Date(2025,selectedMonth - 1,i);
+					const currentWeekday = currentDay? currentDay.toLocaleDateString('ja-JP', { weekday: 'short' }) : '';
+					
 					//挿入された行の内容、データがない場合は赤でハイライト
 					row.innerHTML = `
-					<td class="px-4 py-3">${`2025年${selectedMonth}月${i}日`}</td>
+					<td class="px-4 py-3">${`2025年${selectedMonth}月${i}日(${currentWeekday})`}</td>
 					<td class="px-4 py-3 ${!(isCurrentMonth && isCurrentDay) ? 'text-red-500' : ''}">
 						${isCurrentMonth && isCurrentDay ? stampStartTime : '00:00:00'}
 					</td>
@@ -75,7 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					<td class="px-4 py-3 ${!(isCurrentMonth && isCurrentDay) ? 'text-red-500' : ''}">
 						${isCurrentMonth && isCurrentDay ? stampHoursWorked : '00:00:00'}
 					</td>
-						<td class="w-10">編集</td>
 					`;
 				}
 			})
