@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.attendance.model.Stamp;
+import com.example.attendance.model.Users;
 import com.example.attendance.repository.StampRepository;
 import com.example.attendance.service.StampService;
+import com.example.attendance.service.UsersService;
 
 @Controller
 public class StampController {
@@ -27,8 +29,17 @@ public class StampController {
 	@Autowired
 	private StampService stampService;
 
+	@Autowired
+	private UsersService usersService;
+
 	@GetMapping("/worktime/stamp")
 	public String showStamp(Model model) {
+		// 現在ログインしているユーザーを取得
+		Users loggedInUser = usersService.getLoggedInUser();
+
+		// ユーザー情報を Model に追加
+		model.addAttribute("user", loggedInUser);
+
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -45,16 +56,20 @@ public class StampController {
 			redirectAttributes.addFlashAttribute("stampErrorMsg", "出退勤を選択してください");
 			return "redirect:/worktime/stamp";
 		}
-		Stamp nowStamp = new Stamp();
+
+		// 現在ログインしているユーザを取得
+		Users loggedInUser = usersService.getLoggedInUser();
+
+		//現在の日付と時間を取得
 		LocalTime localTime = LocalTime.now();
 		LocalDate localDate = LocalDate.now();
 		Time nowTime = Time.valueOf(localTime);
 		Date day = Date.valueOf(localDate);
 
-		Long userId = 2L;
-		Stamp existingStamp = stampRepository.findByUserIdAndDay(userId, day);
+		Stamp existingStamp = stampRepository.findByUserAndDay(loggedInUser, day);
 
-		nowStamp.setUserId(userId);
+		Stamp nowStamp = new Stamp();
+		nowStamp.setUser(loggedInUser);
 		nowStamp.setDay(day);
 
 		if (existingStamp != null) {
@@ -88,7 +103,7 @@ public class StampController {
 			}
 		}
 		stampService.saveOrUpdateStamp(nowStamp);
-		return "home";
+		return "redirect:/worktime/home";
 	}
 
 }
