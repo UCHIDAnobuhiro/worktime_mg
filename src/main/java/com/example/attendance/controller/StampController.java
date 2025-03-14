@@ -46,7 +46,6 @@ public class StampController {
 			return "redirect:/worktime/stamp";
 		}
 		Stamp nowStamp = new Stamp();
-
 		LocalTime localTime = LocalTime.now();
 		LocalDate localDate = LocalDate.now();
 		Time nowTime = Time.valueOf(localTime);
@@ -88,7 +87,6 @@ public class StampController {
 				nowStamp.setEnd_time(nowTime);
 			}
 		}
-
 		stampService.saveOrUpdateStamp(nowStamp);
 		return "home";
 	}
