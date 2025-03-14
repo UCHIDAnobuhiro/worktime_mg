@@ -1,13 +1,15 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
-	<title>Insert title here</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>User List</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
 
-<body>
+<body class="flex flex-col min-h-screen">
 	<div th:insert="~{fragments/header :: header-template}"></div>
 	<main class="flex-grow container mx-auto p-4">
 		<section class="text-gray-600 body-font">
@@ -15,11 +17,13 @@
 				<div class="flex flex-col text-center w-full mb-20">
 					<div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto relative">
 						<h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 mx-auto">○○さん</h1>
-						<button
-							class="absolute right-0 top-0 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
-							onclick="location.href='stamp'">打刻</button>
+						<a th:href="@{/worktime/home}" class="absolute right-0 top-0 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
+							戻る</a>
 					</div>
 					<p class="lg:w-2/3 mx-auto leading-relaxed text-base">毎日の打刻を忘れないでください</p>
+				</div>
+				<div class="flex flex-col text-center w-full mb-20">
+					<h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">従業員一覧画面</h1>
 				</div>
 				<div class="lg:w-2/3 w-full mx-auto overflow-auto flex flex-row items-center mb-2">
 					<label for="monthSelect">月を選択：</label>
@@ -27,24 +31,35 @@
 						<option th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}" th:text="${month}+'月'">
 						</option>
 					</select>
-					<span class="ml-4" id="workTimeMonth"
-						th:text="'総勤務時間: ' + (${#lists.isEmpty(calculators) ? '00:00:00' : calculators[0].workTimeMonth})"></span>
-					<span class="ml-4" id="workDaysMonth"
-						th:text="'出勤日数: ' + (${#lists.isEmpty(calculators) ? 0 : calculators[0].workDaysMonth})"></span>
-          <a th:href="@{/worktime/edit}" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none
-							hover:bg-indigo-600 rounded">編集</a>
-					<a th:href="@{/worktime/user-list}" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none
-							hover:bg-indigo-600 rounded">従業員一覧</a>
 				</div>
 				<div class="lg:w-2/3 w-full mx-auto overflow-auto">
-					<table class="table-auto w-full text-left whitespace-no-wrap" id="tableContainer">
+					<table class="table-auto w-full text-left whitespace-no-wrap">
+						<thead>
+							<tr>
+								<th
+									class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">
+									従業員名</th>
+								<th
+									class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+									総勤務時間</th>
+								<th
+									class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">
+									出勤日数</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="px-4 py-3">test</td>
+								<td class="px-4 py-3">test</td>
+								<td class="px-4 py-3">test</td>
+							</tr>
+						</tbody>
 					</table>
 				</div>
 			</div>
 		</section>
 	</main>
 	<div th:insert="~{fragments/footer :: footer-template}"></div>
-	<script th:src="@{/js/update-home-by-month.js}"></script>
 </body>
 
 </html>
