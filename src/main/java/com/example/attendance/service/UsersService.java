@@ -26,7 +26,8 @@ public class UsersService {
 		return null;
 	}
 
-	public List<UserWorkDataDTO> getUsersWithWorkData() {
-		return usersRepository.getUsersWithWorkData();
+	public List<UserWorkDataDTO> getUsersWithWorkData(Integer month) {
+		return usersRepository.getUsersWithWorkData(month);
 	}
+
 }

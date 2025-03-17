@@ -16,7 +16,8 @@
 			<div class="container px-5 py-24 mx-auto">
 				<div class="flex flex-col text-center w-full mb-20">
 					<div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto relative">
-						<h1 th:text="${user.name} + 'さん'" class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 mx-auto"></h1>
+						<h1 th:text="${user.name} + 'さん'"
+							class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 mx-auto"></h1>
 						<a th:href="@{/worktime/home}"
 							class="absolute right-0 top-0 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
 							戻る</a>
@@ -26,13 +27,15 @@
 				<div class="flex flex-col text-center w-full mb-20">
 					<h1 class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">従業員一覧画面</h1>
 				</div>
-				<div class="lg:w-2/3 w-full mx-auto overflow-auto flex flex-row items-center mb-2">
+				<form id="monthForm" method="get" action="/worktime/user-list"
+					class="lg:w-2/3 w-full mx-auto overflow-auto flex flex-row items-center mb-2">
 					<label for="monthSelect">月を選択：</label>
 					<select id="monthSelect" name="month">
-						<option th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}" th:text="${month}+'月'">
+						<option th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}" th:text="${month}+'月'"
+							th:selected="${selectedMonth != null && selectedMonth == month}">
 						</option>
 					</select>
-				</div>
+				</form>
 				<div class="lg:w-2/3 w-full mx-auto overflow-auto">
 					<table class="table-auto w-full text-left whitespace-no-wrap">
 						<thead>
@@ -50,12 +53,18 @@
 						</thead>
 						<tbody>
 							<tr th:if="${#lists.isEmpty(userWorkDataList)}">
-							    <td colspan="3">データがありません</td>
+								<td colspan="3">データがありません</td>
 							</tr>
 							<tr th:each="userWorkData : ${userWorkDataList}">
-							    <td class="px-4 py-3" th:text="${userWorkData != null && userWorkData.name != null ? userWorkData.name : '未設定'}"></td>
-							    <td class="px-4 py-3" th:text="${userWorkData != null && userWorkData.workTimeMonth != null ? userWorkData.workTimeMonth : '00:00:00'}"></td>
-							    <td class="px-4 py-3" th:text="${userWorkData != null && userWorkData.workDaysMonth != null ? userWorkData.workDaysMonth : '0'}"></td>
+								<td class="px-4 py-3"
+									th:text="${userWorkData != null && userWorkData.name != null ? userWorkData.name : '未設定'}">
+								</td>
+								<td class="px-4 py-3"
+									th:text="${userWorkData != null && userWorkData.workTimeMonth != null ? userWorkData.workTimeMonth : '00:00:00'}">
+								</td>
+								<td class="px-4 py-3"
+									th:text="${userWorkData != null && userWorkData.workDaysMonth != null ? userWorkData.workDaysMonth : '0'}">
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -64,6 +73,7 @@
 		</section>
 	</main>
 	<div th:insert="~{fragments/footer :: footer-template}"></div>
+	<script src="/js/month-select.js" defer></script>
 </body>
 
 </html>

@@ -12,4 +12,5 @@ public class UserWorkDataDTO {
 	private String name;
 	private String workTimeMonth;
 	private Integer workDaysMonth;
+	private Integer month;
 }
