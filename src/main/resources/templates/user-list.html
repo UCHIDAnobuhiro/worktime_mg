@@ -49,10 +49,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td class="px-4 py-3">test</td>
-								<td class="px-4 py-3">test</td>
-								<td class="px-4 py-3">test</td>
+							<tr th:if="${#lists.isEmpty(userWorkDataList)}">
+							    <td colspan="3">データがありません</td>
+							</tr>
+							<tr th:each="userWorkData : ${userWorkDataList}">
+							    <td class="px-4 py-3" th:text="${userWorkData != null && userWorkData.name != null ? userWorkData.name : '未設定'}"></td>
+							    <td class="px-4 py-3" th:text="${userWorkData != null && userWorkData.workTimeMonth != null ? userWorkData.workTimeMonth : '00:00:00'}"></td>
+							    <td class="px-4 py-3" th:text="${userWorkData != null && userWorkData.workDaysMonth != null ? userWorkData.workDaysMonth : '0'}"></td>
 							</tr>
 						</tbody>
 					</table>
