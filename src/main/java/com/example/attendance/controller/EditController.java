@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.attendance.model.Stamp;
 import com.example.attendance.model.Users;
+import com.example.attendance.repository.StampRepository;
 import com.example.attendance.service.StampService;
 import com.example.attendance.service.UsersService;
 
@@ -23,6 +24,9 @@ public class EditController {
 	@Autowired
 	private UsersService usersService;
 
+	@Autowired
+	private StampRepository stampRepository;
+
 	@GetMapping("/worktime/edit")
 	public String editWorktime(Model model) {
 		// 現在ログインしているユーザーを取得
@@ -34,13 +38,31 @@ public class EditController {
 		return "edit";
 	}
 
+	//	@SuppressWarnings("null")
 	@PostMapping("worktime/update")
 	public String updateWorktime(@Valid Stamp stamp, BindingResult bindingResult) {
+
+		// 何も入力されてない場合はリロード
+		if (stamp.getStart_time() == null && stamp.getEnd_time() == null) {
+			return "redirect:/worktime/edit";
+		}
+
 		// 現在ログインしているユーザーを取得
 		Users loggedInUser = usersService.getLoggedInUser();
 
-		// ログインユーザーをセット
+		Stamp existingStamp = stampRepository.findByUserAndDay(loggedInUser, stamp.getDay());
 		stamp.setUser(loggedInUser);
+
+		if (existingStamp != null) {
+			//更新時はid必須
+			stamp.setId(existingStamp.getId());
+			if (stamp.getStart_time() == null) {
+				stamp.setStart_time(existingStamp.getStart_time());
+			}
+			if (stamp.getEnd_time() == null) {
+				stamp.setEnd_time(existingStamp.getEnd_time());
+			}
+		}
 
 		// Stamp を更新
 		stampService.saveOrUpdateStamp(stamp);
