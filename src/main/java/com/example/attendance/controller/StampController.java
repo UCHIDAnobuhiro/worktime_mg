@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.attendance.model.Stamp;
 import com.example.attendance.model.Users;
 import com.example.attendance.repository.StampRepository;
+import com.example.attendance.service.CalculatorService;
 import com.example.attendance.service.StampService;
 import com.example.attendance.service.UsersService;
 
@@ -28,7 +29,8 @@ public class StampController {
 	private StampRepository stampRepository;
 	@Autowired
 	private StampService stampService;
-
+	@Autowired
+	private CalculatorService calculatorService;
 	@Autowired
 	private UsersService usersService;
 
@@ -103,6 +105,7 @@ public class StampController {
 			}
 		}
 		stampService.saveOrUpdateStamp(nowStamp);
+		calculatorService.updateCalculator(loggedInUser, nowStamp.getMonth());
 		return "redirect:/worktime/home";
 	}
 
