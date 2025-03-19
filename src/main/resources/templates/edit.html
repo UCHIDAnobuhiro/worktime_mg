@@ -28,7 +28,7 @@
 					<div class="w-full py-8 flex justify-center">
 						<div class="relative">
 							<label for="date" class="leading-7 text-sm text-gray-600">日付</label>
-							<input type="date" id="date" name="day" required
+							<input type="date" id="date" name="day" th:value="${stamp?.day}" required
 								class="bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 transition-colors duration-200 ease-in-out">
 						</div>
 					</div>
@@ -36,20 +36,21 @@
 						<div class="p-2 w-1/2">
 							<div class="relative">
 								<label for="name" class="leading-7 text-sm text-gray-600">開始打刻</label>
-								<input type="time" name="start_time" required
+								<input type="time" name="start_time" id="start_time" th:value="${stamp?.start_time}"
 									class="editTime w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
 							</div>
 						</div>
 						<div class="p-2 w-1/2">
 							<div class="relative">
 								<label for="email" class="leading-7 text-sm text-gray-600">終了打刻</label>
-								<input type="time" name="end_time" required
+								<input type="time" name="end_time" id="end_time" th:value="${stamp?.end_time}"
 									class="editTime w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
 							</div>
 						</div>
 					</div>
+					<div th:text="${editErrorMsg}" class="text-red-500"></div>
 					<div class="px-2 py-16 w-full flex">
-						<button type="submit"
+						<button type="submit" id="submit_time"
 							class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">変更
 						</button>
 					</div>
@@ -59,6 +60,7 @@
 	</main>
 	<div th:insert="~{fragments/footer :: footer-template}"></div>
 	<script th:src="@{/js/time-convert.js}"></script>
+	<script th:src="@{/js/edit-time-limiter.js}"></script>
 </body>
 
-</html>/html>
+</html>

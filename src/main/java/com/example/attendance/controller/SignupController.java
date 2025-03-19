@@ -1,13 +1,10 @@
 package com.example.attendance.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,22 +13,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.attendance.exception.UserRegistrationException;
 import com.example.attendance.model.Department;
 import com.example.attendance.model.Users;
-import com.example.attendance.repository.UsersRepository;
 import com.example.attendance.service.DepartmentService;
+import com.example.attendance.service.UsersService;
 
 @Controller
 public class SignupController {
-	private final UsersRepository usersRepository;
-	private final PasswordEncoder passwordEncoder;
+	private final UsersService usersService;
 	private final DepartmentService departmentService;
 
 	@Autowired
-	public SignupController(UsersRepository usersRepository, PasswordEncoder passwordEncoder,
-			DepartmentService departmentService) {
-		this.usersRepository = usersRepository;
-		this.passwordEncoder = passwordEncoder;
+	public SignupController(UsersService usersService, DepartmentService departmentService) {
+		this.usersService = usersService;
 		this.departmentService = departmentService;
 	}
 
@@ -48,48 +43,26 @@ public class SignupController {
 			RedirectAttributes redirectAttributes, Model model) {
 
 		// 部署リストを取得（エラー時の再表示用）
-		List<Department> departments = departmentService.getAllDepartments();
-		model.addAttribute("departments", departments);
+		model.addAttribute("departments", departmentService.getAllDepartments());
 
 		if (result.hasErrors()) {
-			System.out.println("バリデーションエラー: " + result.getAllErrors());
 			return "signup";
 		}
 
-		// 既存のメールアドレスの確認
-		Optional<Users> existingUser = usersRepository.findByMail(user.getMail());
-		if (existingUser.isPresent()) {
-			result.rejectValue("mail", "error.user", "このメールアドレスは既に登録されています");
+		try {
+			// serviceで処理を行う
+			usersService.registerUser(user);
+
+			// 成功メッセージをフラッシュ属性で送る
+			redirectAttributes.addFlashAttribute("success", "登録が完了しました！ログインしてください。");
+
+			// ログインページにリダイレクト
+			return "redirect:/login";
+
+		} catch (UserRegistrationException e) {
+			result.rejectValue(e.getFieldName(), "error.user", e.getMessage());
 			return "signup";
 		}
 
-		// パスワードの一致チェック JSでも実装しているが念の為バックでも実装
-		if (!user.getPassword().equals(user.getConfirmPassword())) {
-			result.rejectValue("confirmPassword", "error.user", "パスワードが一致しません");
-			return "signup";
-		}
-
-		// 選択された `departmentId` から `Department` エンティティを取得
-		Optional<Department> departmentOpt = departmentService.getDepartmentById(user.getDepartment().getId());
-		if (departmentOpt.isEmpty()) {
-			result.rejectValue("department", "error.user", "選択された部署が無効です");
-			return "signup";
-		}
-		user.setDepartment(departmentOpt.get()); // Departmentエンティティをセット
-
-		// 日付のデータ取得
-		user.setCreateDate(LocalDateTime.now());
-
-		// パスワードをハッシュ化
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-		// ユーザーをデータベースに保存
-		usersRepository.save(user);
-
-		// 成功メッセージをフラッシュ属性で送る
-		redirectAttributes.addFlashAttribute("success", "登録が完了しました！ログインしてください。");
-
-		// ログインページにリダイレクト
-		return "redirect:/login";
 	}
 }
