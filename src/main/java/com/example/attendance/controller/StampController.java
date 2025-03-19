@@ -68,6 +68,7 @@ public class StampController {
 		Time nowTime = Time.valueOf(localTime);
 		Date day = Date.valueOf(localDate);
 
+		Boolean isClockOut = false;
 		Stamp existingStamp = stampRepository.findByUserAndDay(loggedInUser, day);
 
 		Stamp nowStamp = new Stamp();
@@ -82,6 +83,7 @@ public class StampController {
 				nowStamp.setEnd_time(existingStamp.getEnd_time());
 				if (existingStamp.getStart_time() == null) {
 					nowStamp.setStart_time(nowTime);
+					isClockOut = true;
 				} else {
 					nowStamp.setStart_time(existingStamp.getStart_time());
 					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに出勤した");
@@ -91,6 +93,7 @@ public class StampController {
 				nowStamp.setStart_time(existingStamp.getStart_time());
 				if (existingStamp.getEnd_time() == null) {
 					nowStamp.setEnd_time(nowTime);
+					isClockOut = true;
 				} else {
 					nowStamp.setEnd_time(existingStamp.getEnd_time());
 					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに退勤した");
@@ -105,7 +108,9 @@ public class StampController {
 			}
 		}
 		stampService.saveOrUpdateStamp(nowStamp);
-		calculatorService.updateCalculator(loggedInUser, nowStamp.getMonth());
+		if (isClockOut) {
+			calculatorService.updateCalculator(loggedInUser, nowStamp.getMonth());
+		}
 		return "redirect:/worktime/home";
 	}
 
