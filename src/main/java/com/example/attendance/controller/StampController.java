@@ -83,7 +83,6 @@ public class StampController {
 				nowStamp.setEnd_time(existingStamp.getEnd_time());
 				if (existingStamp.getStart_time() == null) {
 					nowStamp.setStart_time(nowTime);
-					isClockOut = true;
 				} else {
 					nowStamp.setStart_time(existingStamp.getStart_time());
 					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに出勤した");
