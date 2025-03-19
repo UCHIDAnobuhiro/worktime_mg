@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.attendance.model.Stamp;
 import com.example.attendance.model.Users;
 import com.example.attendance.repository.StampRepository;
+import com.example.attendance.service.CalculatorService;
 import com.example.attendance.service.StampService;
 import com.example.attendance.service.UsersService;
 
@@ -26,6 +27,9 @@ public class EditController {
 
 	@Autowired
 	private UsersService usersService;
+
+	@Autowired
+	private CalculatorService calculatorService;
 
 	@Autowired
 	private StampRepository stampRepository;
@@ -105,6 +109,9 @@ public class EditController {
 		}
 		// Stamp を更新
 		stampService.saveOrUpdateStamp(stamp);
+
+		//user+monthと一致してるものだけを更新
+		calculatorService.updateCalculator(loggedInUser, stamp.getMonth());
 		return "redirect:/worktime/home";
 	}
 }

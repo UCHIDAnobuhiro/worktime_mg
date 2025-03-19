@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.attendance.model.Stamp;
 import com.example.attendance.model.Users;
 import com.example.attendance.repository.StampRepository;
+import com.example.attendance.service.CalculatorService;
 import com.example.attendance.service.StampService;
 import com.example.attendance.service.UsersService;
 
@@ -28,7 +29,8 @@ public class StampController {
 	private StampRepository stampRepository;
 	@Autowired
 	private StampService stampService;
-
+	@Autowired
+	private CalculatorService calculatorService;
 	@Autowired
 	private UsersService usersService;
 
@@ -66,6 +68,7 @@ public class StampController {
 		Time nowTime = Time.valueOf(localTime);
 		Date day = Date.valueOf(localDate);
 
+		Boolean isClockOut = false;
 		Stamp existingStamp = stampRepository.findByUserAndDay(loggedInUser, day);
 
 		Stamp nowStamp = new Stamp();
@@ -78,19 +81,26 @@ public class StampController {
 			}
 			if (isClockIn) {
 				nowStamp.setEnd_time(existingStamp.getEnd_time());
-				if (existingStamp.getStart_time() == null) {
+				//出退勤どちらでもない
+				if (existingStamp.getStart_time() == null && existingStamp.getEnd_time() == null) {
 					nowStamp.setStart_time(nowTime);
-				} else {
-					nowStamp.setStart_time(existingStamp.getStart_time());
+				}
+				//すでに出勤打刻した
+				else if (existingStamp.getStart_time() != null) {
 					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに出勤した");
+					return "redirect:/worktime/stamp";
+
+					//出勤打刻しなかっただけど退勤打刻した
+				} else if (existingStamp.getEnd_time() != null) {
+					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに退勤したので出勤打刻はできません");
 					return "redirect:/worktime/stamp";
 				}
 			} else {
 				nowStamp.setStart_time(existingStamp.getStart_time());
 				if (existingStamp.getEnd_time() == null) {
 					nowStamp.setEnd_time(nowTime);
+					isClockOut = true;
 				} else {
-					nowStamp.setEnd_time(existingStamp.getEnd_time());
 					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに退勤した");
 					return "redirect:/worktime/stamp";
 				}
@@ -99,10 +109,14 @@ public class StampController {
 			if (isClockIn) {
 				nowStamp.setStart_time(nowTime);
 			} else {
+				isClockOut = true;
 				nowStamp.setEnd_time(nowTime);
 			}
 		}
 		stampService.saveOrUpdateStamp(nowStamp);
+		if (isClockOut) {
+			calculatorService.updateCalculator(loggedInUser, nowStamp.getMonth());
+		}
 		return "redirect:/worktime/home";
 	}
 
