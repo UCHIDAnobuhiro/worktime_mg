@@ -81,11 +81,18 @@ public class StampController {
 			}
 			if (isClockIn) {
 				nowStamp.setEnd_time(existingStamp.getEnd_time());
-				if (existingStamp.getStart_time() == null) {
+				//出退勤どちらでもない
+				if (existingStamp.getStart_time() == null && existingStamp.getEnd_time() == null) {
 					nowStamp.setStart_time(nowTime);
-				} else {
-					nowStamp.setStart_time(existingStamp.getStart_time());
+				}
+				//すでに出勤打刻した
+				else if (existingStamp.getStart_time() != null) {
 					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに出勤した");
+					return "redirect:/worktime/stamp";
+
+					//出勤打刻しなかっただけど退勤打刻した
+				} else if (existingStamp.getEnd_time() != null) {
+					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに退勤したので出勤打刻はできません");
 					return "redirect:/worktime/stamp";
 				}
 			} else {
@@ -94,7 +101,6 @@ public class StampController {
 					nowStamp.setEnd_time(nowTime);
 					isClockOut = true;
 				} else {
-					nowStamp.setEnd_time(existingStamp.getEnd_time());
 					redirectAttributes.addFlashAttribute("stampErrorMsg", "すでに退勤した");
 					return "redirect:/worktime/stamp";
 				}
@@ -103,6 +109,7 @@ public class StampController {
 			if (isClockIn) {
 				nowStamp.setStart_time(nowTime);
 			} else {
+				isClockOut = true;
 				nowStamp.setEnd_time(nowTime);
 			}
 		}
