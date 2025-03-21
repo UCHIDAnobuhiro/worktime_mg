@@ -12,13 +12,11 @@ import com.example.attendance.repository.StampRepository;
 @Service
 public class EditService {
 
-	public final StampRepository stampRepository;
-	public final StampService stampService;
-	public final CalculatorService calculatorService;
+	private final StampRepository stampRepository;
+	private final CalculatorService calculatorService;
 
-	public EditService(StampRepository stampRepository, StampService stampService, CalculatorService calculatorServic) {
+	public EditService(StampRepository stampRepository, CalculatorService calculatorServic) {
 		this.stampRepository = stampRepository;
-		this.stampService = stampService;
 		this.calculatorService = calculatorServic;
 	}
 
