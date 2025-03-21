@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.attendance.dto.WorkTimeResponse;
 import com.example.attendance.model.Stamp;
 import com.example.attendance.service.HomeService;
 
@@ -40,14 +41,13 @@ public class HomeController {
 
 	@PatchMapping("/updateWorkTimeByMonth/{month}")
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> updateWorkTime(@PathVariable Integer month) {
+	public ResponseEntity<?> updateWorkTime(@PathVariable Integer month) {
 		try {
-			Map<String, Object> response = homeService.getWorkTimeByMonth(month);
+			WorkTimeResponse response = homeService.getWorkTimeByMonth(month);
 			return ResponseEntity.ok(response);
 		} catch (Exception e) {
-			Map<String, Object> error = new HashMap<>();
-			error.put("error", "勤務時間の取得中にエラーが発生しました: " + e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("error", "勤務時間の取得中にエラーが発生しました." + e.getMessage()));
 		}
 	}
 

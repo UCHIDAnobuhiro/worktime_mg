@@ -38,6 +38,14 @@ public class UsersService {
 		return null;
 	}
 
+	public Users getLoggedInUserOrThrow() {
+		Users user = getLoggedInUser();
+		if (user == null) {
+			throw new IllegalStateException("ログインユーザが取得できません");
+		}
+		return user;
+	}
+
 	public List<UserWorkDataDTO> getUsersWithWorkData(Integer month) {
 		return usersRepository.getUsersWithWorkData(month);
 	}
