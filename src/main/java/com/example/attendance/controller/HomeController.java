@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,38 +22,39 @@ import com.example.attendance.model.Stamp;
 import com.example.attendance.model.Users;
 import com.example.attendance.repository.CalculatorRepository;
 import com.example.attendance.repository.StampRepository;
+import com.example.attendance.service.HomeService;
 import com.example.attendance.service.UsersService;
 
 @Controller
 public class HomeController {
 
-	@Autowired
-	private StampRepository stampRepository;
+	private final StampRepository stampRepository;
+	private final CalculatorRepository calculatorRepository;
+	private final UsersService usersService;
+	private final HomeService homeService;
 
-	@Autowired
-	private CalculatorRepository calculatorRepository;
+	public HomeController(
+			StampRepository stampRepository,
+			CalculatorRepository calculatorRepository,
+			UsersService usersService,
+			HomeService homeService) {
+		this.stampRepository = stampRepository;
+		this.calculatorRepository = calculatorRepository;
+		this.usersService = usersService;
+		this.homeService = homeService;
 
-	@Autowired
-	private UsersService usersService;
+	}
 
-	//calculatorとSTAMPのすべてのデータを取得
 	@GetMapping("/worktime/home")
 	public String showHome(Model model) {
-		// 現在ログインしているユーザーを取得
-		Users loggedInUser = usersService.getLoggedInUser();
+		try {
+			homeService.prepareHomeData(model);
+			return "home";
 
-		// ユーザー情報を Model に追加
-		model.addAttribute("user", loggedInUser);
-
-		// Calculator の取得
-		List<Calculator> calculators = calculatorRepository.findByUser(loggedInUser);
-		model.addAttribute("calculators", calculators);
-
-		//月を選択selecteの初期値を現在の月にする
-		Integer selectedMonth = LocalDate.now().getMonthValue();
-		model.addAttribute("selectedMonth", selectedMonth);
-
-		return "home";
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", "データ取得中にエラーが発生しました" + e.getMessage());
+			return "error";
+		}
 	}
 
 	//月に対する総勤務時間と出勤日数の更新
