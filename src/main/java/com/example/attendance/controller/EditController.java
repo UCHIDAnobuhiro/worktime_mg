@@ -108,7 +108,7 @@ public class EditController {
 			}
 		}
 		// Stamp を更新
-		stampService.saveOrUpdateStamp(stamp);
+		stampRepository.save(stamp);
 
 		//user+monthと一致してるものだけを更新
 		calculatorService.updateCalculator(loggedInUser, stamp.getMonth());
