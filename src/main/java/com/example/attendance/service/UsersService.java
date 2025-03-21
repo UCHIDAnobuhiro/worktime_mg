@@ -1,17 +1,15 @@
 package com.example.attendance.service;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import jakarta.transaction.Transactional;
 
+import jakarta.transaction.Transactional;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 import com.example.attendance.dto.UserWorkDataDTO;
 import com.example.attendance.exception.UserRegistrationException;
@@ -39,8 +37,16 @@ public class UsersService {
 		}
 		return null;
 	}
-  
-  public List<UserWorkDataDTO> getUsersWithWorkData(Integer month) {
+
+	public Users getLoggedInUserOrThrow() {
+		Users user = getLoggedInUser();
+		if (user == null) {
+			throw new IllegalStateException("ログインユーザが取得できません");
+		}
+		return user;
+	}
+
+	public List<UserWorkDataDTO> getUsersWithWorkData(Integer month) {
 		return usersRepository.getUsersWithWorkData(month);
 	}
 
@@ -83,7 +89,7 @@ public class UsersService {
 
 		// ユーザーをデータベースに保存
 		usersRepository.save(user);
-    
-  }
+
+	}
 
 }

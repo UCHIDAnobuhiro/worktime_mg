@@ -4,7 +4,6 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,6 @@ public class SignupController {
 	private final UsersService usersService;
 	private final DepartmentService departmentService;
 
-	@Autowired
 	public SignupController(UsersService usersService, DepartmentService departmentService) {
 		this.usersService = usersService;
 		this.departmentService = departmentService;
@@ -39,7 +37,7 @@ public class SignupController {
 	}
 
 	@PostMapping("/signup")
-	public String processSignup(@ModelAttribute("user") @Valid Users user, BindingResult result,
+	public String processSignup(@ModelAttribute @Valid Users user, BindingResult result,
 			RedirectAttributes redirectAttributes, Model model) {
 
 		// 部署リストを取得（エラー時の再表示用）
