@@ -3,7 +3,6 @@ package com.example.attendance.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.attendance.model.Department;
@@ -14,7 +13,6 @@ public class DepartmentService {
 
 	private final DepartmentRepository departmentRepository;
 
-	@Autowired
 	public DepartmentService(DepartmentRepository departmentRepository) {
 		this.departmentRepository = departmentRepository;
 	}
