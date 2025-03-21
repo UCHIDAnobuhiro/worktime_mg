@@ -14,7 +14,8 @@
 			<div class="container py-24 mx-auto">
 				<div class="flex flex-col text-center w-full mb-20">
 					<div class="flex pl-4 mt-4 lg:w-2/3 w-full mx-auto relative">
-						<h1 th:text="${user.name} + 'さん'" class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 mx-auto"></h1>
+						<h1 th:text="${user.name} + 'さん'"
+							class="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900 mx-auto"></h1>
 						<a th:href="@{/worktime/stamp}"
 							class="absolute right-0 top-0 text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">
 							打刻 </a>
@@ -24,14 +25,15 @@
 				<div class="lg:w-2/3 w-full mx-auto overflow-auto flex flex-row items-center mb-2">
 					<label for="monthSelect">月を選択：</label>
 					<select id="monthSelect" name="month">
-						<option th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}" th:text="${month}+'月'">
+						<option th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}" th:text="${month}+'月'"
+							th:selected="${selectedMonth != null && selectedMonth == month}">
 						</option>
 					</select>
 					<span class="ml-4" id="workTimeMonth"
 						th:text="'総勤務時間: ' + (${#lists.isEmpty(calculators) ? '00:00:00' : calculators[0].workTimeMonth})"></span>
 					<span class="ml-4" id="workDaysMonth"
 						th:text="'出勤日数: ' + (${#lists.isEmpty(calculators) ? 0 : calculators[0].workDaysMonth})"></span>
-          <a th:href="@{/worktime/edit}" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none
+					<a th:href="@{/worktime/edit}" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none
 							hover:bg-indigo-600 rounded">編集</a>
 					<a th:href="@{/worktime/user-list}" class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none
 							hover:bg-indigo-600 rounded">従業員一覧</a>
