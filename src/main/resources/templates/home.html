@@ -3,6 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Insert title here</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
@@ -22,8 +23,8 @@
 					</div>
 					<p class="lg:w-2/3 mx-auto leading-relaxed text-base">毎日の打刻を忘れないでください</p>
 				</div>
-				<div class="lg:w-2/3 w-full mx-auto overflow-auto flex flex-row items-center mb-2">
-					<label for="monthSelect">月を選択：</label>
+				<div class="lg:w-2/3 w-full mx-auto overflow-auto flex flex-row items-center mb-2 whitespace-nowrap">
+					<label for="monthSelect">月：</label>
 					<select id="monthSelect" name="month">
 						<option th:each="month : ${#numbers.sequence(1,12)}" th:value="${month}" th:text="${month}+'月'"
 							th:selected="${selectedMonth != null && selectedMonth == month}">
@@ -39,7 +40,7 @@
 							hover:bg-indigo-600 rounded">従業員一覧</a>
 				</div>
 				<div class="lg:w-2/3 w-full mx-auto overflow-auto">
-					<table class="table-auto w-full text-left whitespace-no-wrap" id="tableContainer">
+					<table class="table-auto w-full text-left whitespace-nowrap" id="tableContainer">
 					</table>
 				</div>
 			</div>
